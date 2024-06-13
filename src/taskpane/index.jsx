@@ -12,7 +12,17 @@ const rootElement = document.getElementById("container");
 const root = createRoot(rootElement);
 
 /* Render application after Office initializes */
-Office.onReady(() => {
+Office.onReady(async () => {
+  // const contextualTabJSON = ` ... `; // Assign the JSON string.
+  // const contextualTab = JSON.parse(contextualTabJSON);
+  // await Office.ribbon.requestCreateControls(contextualTab);
+
+  // await Excel.run((context) => {
+  //   const charts = context.workbook.worksheets.getActiveWorksheet().charts;
+  //   charts.onActivated.add("showDataTab");
+  //   charts.onDeactivated.add("hideDataTab");
+  //   return context.sync();
+  // });
   root.render(
     <FluentProvider theme={webLightTheme}>
       <Provider store={store}>

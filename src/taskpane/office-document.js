@@ -24,25 +24,26 @@ const insertText = async (invoiceData) => {
       // Extract column names from the first row values
       const columnNames = firstRowValues.map((value) => value.toString());
       const x = range.values.shift();
+      range.values = [[10], [20], [30]];
       console.log("rows: ", range.values);
       console.log("Column names:", columnNames);
       const extractedData = [];
 
       // Iterate through the keys of the invoice data object
-      Object.keys(invoiceData).forEach((key) => {
-        const columnData = invoiceData[key];
+      // Object.keys(invoiceData).forEach((key) => {
+      //   const columnData = invoiceData[key];
 
-        // Check if the column name exists in the columnNamesToCheck array
-        if (columnNames.includes(columnData.v)) {
-          // Push the column name and its corresponding value to the extractedData array
-          extractedData.push({ [columnData.v]: columnData.w });
-        }
-      });
+      //   // Check if the column name exists in the columnNamesToCheck array
+      //   if (columnNames.includes(columnData.v)) {
+      //     // Push the column name and its corresponding value to the extractedData array
+      //     extractedData.push({ [columnData.v]: columnData.w });
+      //   }
+      // });
 
       // Display the extracted data
       console.log("Extracted data:", extractedData);
       // Update the fill color of the selected range to yellow
-      range.format.fill.color = "yellow";
+      // range.format.fill.color = "yellow";
 
       // Autofit columns for better visibility
       range.format.autofitColumns();
@@ -55,3 +56,6 @@ const insertText = async (invoiceData) => {
 };
 
 export default insertText;
+// pdf, jpeg, jpg, png
+
+// npm run start:web -- --document 'https://onedrive.live.com/edit?action=editnew&id=5385D7DE29463E8C!357772&resid=5385D7DE29463E8C!357772&ithint=file,xlsx&ct=1714556500994&wdNewAndOpenCt=1714556500140&wdOrigin=OFFICECOM-WEB.START.NEW&wdPreviousSessionSrc=HarmonyWeb&wdPreviousSession=f0c0dcc1-3c26-4a64-a41c-3492ecc970cb&wdo=2&cid=5385d7de29463e8c&wdaddindevserverport=3000&wdaddinmanifestfile=manifest.xml&wdaddinmanifestguid=f133859a-dcc5-4ed5-b576-259a194f2078'

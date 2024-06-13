@@ -1,6 +1,6 @@
 import { SET_FILE_SHEETS_CONTENT, SET_SECTION, SET_SHEETS, SET_STATE } from "./actions";
 
-const defaultState = { section: "", state: [], sheets: {}, fileContent: {} };
+const defaultState = { section: "Login", state: [], sheets: {}, fileContent: {} };
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case SET_SECTION:

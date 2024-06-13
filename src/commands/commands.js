@@ -7,7 +7,46 @@
 
 Office.onReady(() => {
   // If needed, Office.js is ready to be called.
+  Office.ribbon.requestUpdate({
+    tabs: [
+      {
+        id: "CustomTab.acumentv3", // Match the id from the manifest
+        groups: [
+          {
+            id: "CustomGroup.acumentv3", // Match the id from the manifest
+            controls: [
+              {
+                id: "TaskpaneButton",
+                visible: false,
+              },
+              {
+                id: "Button2",
+                visible: true,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
 });
+
+/**
+ * Function to be called when Button2 is clicked.
+ * @param event {Office.AddinCommands.Event}
+ */
+function actionButton2(event) {
+  Excel.run(async (context) => {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    sheet.getRange("A1").values = [["Button2 clicked!"]];
+    await context.sync();
+  }).catch((error) => {
+    console.error(error);
+  });
+
+  // Indicate when the function is complete
+  event.completed();
+}
 
 /**
  * Shows a notification when the add-in command is executed.
@@ -30,3 +69,4 @@ function action(event) {
 
 // Register the function with Office.
 Office.actions.associate("action", action);
+Office.actions.associate("actionButton2", actionButton2);

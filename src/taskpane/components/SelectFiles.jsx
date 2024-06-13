@@ -3,7 +3,7 @@ import * as React from "react";
 import { connect, useDispatch } from "react-redux";
 import { SetSection } from "../../redux/actions";
 import { getExcelSheets } from "../ReadFiles";
-
+import Slideshow from "./Slideshow";
 const useStyles = makeStyles({
   instructions: {
     fontWeight: tokens.fontWeightSemibold,
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
 });
 
-const SelectFiles = ({ state }) => {
+const SelectFiles = ({ state, setIsAuthenticated }) => {
   const dispatch = useDispatch();
   // const [text, setText] = useState("Some text.");
   // // const [state, setState] = useState([]);
@@ -72,7 +72,6 @@ const SelectFiles = ({ state }) => {
       <Button appearance="primary" disabled={false} size="large" onClick={handleTextInsertion}>
         Insert text
       </Button> */}
-
       {state.map((file, i) => (
         <div className={styles.div} key={i}>
           <label>{file.name}</label>
@@ -87,7 +86,7 @@ const SelectFiles = ({ state }) => {
           />
         </div>
       ))}
-      <Button appearance="primary" disabled={false} size="large" onClick={() => dispatch(SetSection("Sheets"))}>
+      <Button appearance="primary" disabled={false} size="large" onClick={() => setIsAuthenticated("Sheets")}>
         Next
       </Button>
     </div>

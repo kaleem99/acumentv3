@@ -2,6 +2,7 @@ import { Button, makeStyles, tokens } from "@fluentui/react-components";
 import * as React from "react";
 import { connect, useDispatch } from "react-redux";
 import { readExcelFiles } from "../ReadFiles";
+import Slideshow from "./Slideshow";
 
 const useStyles = makeStyles({
   instructions: {
@@ -71,12 +72,14 @@ const SelectSheets = ({ state, sheets, defaultState }) => {
       <Button appearance="primary" disabled={false} size="large" onClick={handleTextInsertion}>
         Insert text
       </Button> */}
+      <Slideshow state={state} />
+
       <h3>Select File Sheets</h3>
       {state.map((file, i) => {
         return (
           <div key={i}>
             <h3>{file.name}</h3>
-            {file.selected &&
+            {/* {file.selected &&
               sheets[file.name].sheets.map((obj) => {
                 return (
                   <div className={styles.div} key={i}>
@@ -92,7 +95,7 @@ const SelectSheets = ({ state, sheets, defaultState }) => {
                     />
                   </div>
                 );
-              })}
+              })} */}
           </div>
         );
       })}
@@ -101,9 +104,9 @@ const SelectSheets = ({ state, sheets, defaultState }) => {
         disabled={false}
         size="large"
         onClick={() => {
-          const invoiceData = defaultState.fileContent["Book 4.xlsx"]["Invoice"];
-          const columnNames = Object.keys(invoiceData).filter((key) => key !== "!ref");
-          console.log("Column names (entity names):", columnNames);
+          const invoiceData = defaultState.fileContent;
+          // const columnNames = Object.keys(invoiceData).filter((key) => key !== "!ref");
+          // console.log("Column names (entity names):", columnNames);
           console.log("Invoice Data: ", invoiceData);
         }}
       >

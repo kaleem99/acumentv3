@@ -1,2 +1,5 @@
 node_modules
 ./node_modules
+./src/taskpane/components/aws-exports.js
+src/taskpane/components/aws-exports.js
+aws-exports.js

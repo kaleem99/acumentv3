@@ -63,6 +63,10 @@ module.exports = async (env, options) => {
             filename: "assets/[name][ext][query]",
           },
         },
+        {
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
+        },
       ],
     },
     plugins: [
@@ -94,6 +98,25 @@ module.exports = async (env, options) => {
         filename: "commands.html",
         template: "./src/commands/commands.html",
         chunks: ["commands"],
+      }),
+      new HtmlWebpackPlugin({
+        filename: "taskpane.html",
+        template: "./src/taskpane/taskpane.html",
+        chunks: ["taskpane", "vendor", "polyfill"],
+        links: [
+          // Add external CSS links here
+          {
+            rel: "stylesheet",
+            type: "text/css",
+            charset: "UTF-8",
+            href: "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css",
+          },
+          {
+            rel: "stylesheet",
+            type: "text/css",
+            href: "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css",
+          },
+        ],
       }),
       new webpack.ProvidePlugin({
         Promise: ["es6-promise", "Promise"],

@@ -99,7 +99,7 @@ const Header = (props) => {
       <Image width="90" height="90" src={logo} alt={title} />
       {/* <input type="file" accept=".pdf, image/*" onChange={handleFileChange} /> */}
       <div>
-        <input multiple type="file" accept=".pdf, image/*" onChange={handleFileChange} />
+        {/* <input multiple type="file" accept=".pdf, image/*" onChange={handleFileChange} /> */}
         {/* <div style={{ width: "80%", margin: "auto", textAlign: "center", border: "1px solid" }}>
           <Slider {...settings}>
             {state.map((data) => {

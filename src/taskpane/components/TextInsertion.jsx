@@ -55,7 +55,7 @@ const TextInsertion = ({ state, defaultState }) => {
   };
 
   const styles = useStyles();
-  // console.log(state, 100);
+  console.log(state, "STATE");
   return (
     <div className={styles.textPromptAndInsertion}>
       {/* <Field className={styles.textAreaField} size="large" label="Enter text to be inserted into the document.">

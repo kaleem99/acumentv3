@@ -5,8 +5,9 @@ import {
   CognitoIdentityProviderClient,
   AdminUpdateUserAttributesCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
+import logo from "../../../assets/Acumen.png"; // Replace with the path to your logo image
 
-const authenticate = (Email, Password, newPassword) => {
+const authenticate = (Email, Password, setIsAuthenticated) => {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({
       Username: Email,
@@ -21,27 +22,28 @@ const authenticate = (Email, Password, newPassword) => {
       onSuccess: async (result) => {
         console.log("Login successful");
         console.log(result);
+        setIsAuthenticated("");
 
         // Update email as verified
-        try {
-          const command = new AdminUpdateUserAttributesCommand({
-            UserPoolId: userPoolId,
-            Username: Email,
-            UserAttributes: [
-              {
-                Name: "email_verified",
-                Value: "true",
-              },
-            ],
-          });
+        // try {
+        //   const command = new AdminUpdateUserAttributesCommand({
+        //     UserPoolId: userPoolId,
+        //     Username: Email,
+        //     UserAttributes: [
+        //       {
+        //         Name: "email_verified",
+        //         Value: "true",
+        //       },
+        //     ],
+        //   });
 
-          await client.send(command);
-          console.log("Email verified");
-          resolve(result);
-        } catch (error) {
-          console.error("Error verifying email: ", error);
-          reject(error);
-        }
+        //   await client.send(command);
+        //   console.log("Email verified");
+        //   resolve(result);
+        // } catch (error) {
+        //   console.error("Error verifying email: ", error);
+        //   reject(error);
+        // }
       },
       onFailure: (err) => {
         console.log("Login failed", err);
@@ -67,10 +69,11 @@ const Login = ({ setIsAuthenticated }) => {
 
   const handleLogin = async () => {
     try {
-      const result = await authenticate(username, password);
+      const result = await authenticate(username, password, setIsAuthenticated);
       if (result.user) {
         setCognitoUser(result.user);
         setShowNewPassword(true);
+
       } else {
         setError("");
         console.log("Logged in user:", result);
@@ -125,6 +128,7 @@ const Login = ({ setIsAuthenticated }) => {
       maxWidth: "400px",
       display: "flex",
       flexDirection: "column",
+      alignItems: "center",
     },
     input: {
       width: "100%",
@@ -159,11 +163,16 @@ const Login = ({ setIsAuthenticated }) => {
       cursor: "pointer",
       marginTop: "1rem",
     },
+    logo: {
+      width: "150px",
+      marginBottom: "1rem",
+    },
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.form}>
+        <img src={logo} alt="Acumen Logo" style={styles.logo} />
         <h2>Login</h2>
         <input
           type="text"

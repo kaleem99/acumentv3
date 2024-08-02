@@ -1,6 +1,6 @@
-import { SET_FILE_SHEETS_CONTENT, SET_SECTION, SET_SHEETS, SET_STATE } from "./actions";
+import { SET_FILE_SHEETS_CONTENT, SET_SECTION, SET_SHEETS, SET_STATE, SET_CREDITS, SET_SESSION } from "./actions";
 
-const defaultState = { section: "Login", state: [], sheets: {}, fileContent: {} };
+const defaultState = { section: "Login", state: [], sheets: {}, fileContent: {}, credits: 0, session: null };
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case SET_SECTION:
@@ -22,6 +22,11 @@ const reducer = (state = defaultState, action) => {
           [fileName]: { ...state.fileContent[fileName], [name]: payload },
         },
       };
+    case SET_CREDITS:
+      console.log("I am working on it", action.payload)
+      return { ...state, credits: action.payload };
+    case SET_SESSION:
+      return {...state, session: action.payload}
     default:
       return state;
   }

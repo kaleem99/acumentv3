@@ -61,7 +61,7 @@ const Header = (props) => {
       console.log("Please select a file.");
     }
   };
-  const { title, logo, message } = props;
+  const { title, logo, message, credits } = props;
   const styles = useStyles();
   // React.useEffect(() => {
   //   if (state.length > 0) {
@@ -96,7 +96,9 @@ const Header = (props) => {
 
   return (
     <section className={styles.welcome__header}>
-      <Image width="90" height="90" src={logo} alt={title} />
+     {props.userRole === "TenantAdmin" &&  <h1>Available credits: {credits}</h1>}
+      {console.log(props, "Header.js file")}
+      <Image width="190" height="190" src={logo} alt={title} />
       {/* <input type="file" accept=".pdf, image/*" onChange={handleFileChange} /> */}
       <div>
         {/* <input multiple type="file" accept=".pdf, image/*" onChange={handleFileChange} /> */}
@@ -151,6 +153,8 @@ const mapStateToProps = (state) => {
   console.log(state, 40);
   return {
     newState: state.state,
+    credits: state.credits,
+    userRole: state?.session?.idToken["payload"]["custom:userRole"]
   };
 };
 export default connect(mapStateToProps, {})(Header);

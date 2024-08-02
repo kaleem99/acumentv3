@@ -54,7 +54,21 @@ const insertText = async (invoiceData) => {
     console.log("Error: " + error);
   }
 };
+function actionFunction(event) {
+  // Perform your action here
+  Excel.run(function (context) {
+    const sheet = context.workbook.worksheets.getActiveWorksheet();
+    const range = sheet.getRange("A1");
+    console.log("action Button", 1000000);
+    range.values = [["Hello World"]];
+    return context.sync();
+  }).catch(function (error) {
+    console.log(error);
+  });
 
+  // Indicate when the add-in command function is complete
+  event.completed();
+}
 export default insertText;
 // pdf, jpeg, jpg, png
 

@@ -74,10 +74,12 @@
                   <Action xsi:type="ExecuteFunction">
                     <FunctionName>actionButton2</FunctionName>
                   </Action>
-                  <VisibleByDefault>false</VisibleByDefault>
+                  <VisibleByDefault>true</VisibleByDefault>
                 </Control>
+                       
               </Group>
             </CustomTab>
+          
           </ExtensionPoint>
         </DesktopFormFactor>
       </Host>

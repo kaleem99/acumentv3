@@ -3,118 +3,113 @@ import * as React from "react";
 import { connect, useDispatch } from "react-redux";
 import { readExcelFiles } from "../ReadFiles";
 import Slideshow from "./Slideshow";
+import logo from "../../../assets/Acumen.png"; // Replace with the path to your logo image
 
 const useStyles = makeStyles({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "2rem",
+    backgroundColor: "#f7f7f7",
+    minHeight: "100vh",
+  },
   instructions: {
     fontWeight: tokens.fontWeightSemibold,
     marginTop: "20px",
     marginBottom: "10px",
+    textAlign: "center",
   },
   textPromptAndInsertion: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    width: "100%",
   },
   textAreaField: {
-    marginLeft: "20px",
-    marginTop: "30px",
-    marginBottom: "20px",
-    marginRight: "20px",
+    margin: "30px 20px 20px 20px",
     maxWidth: "50%",
   },
   input: {
-    width: "40px",
-    height: "40px",
-    marginLeft: "5px",
+    width: "20px",
+    height: "20px",
+    marginLeft: "10px",
   },
   div: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: "10px",
+  },
+  fileSection: {
+    width: "100%",
+    maxWidth: "500px",
+    padding: "1rem",
+    backgroundColor: "#fff",
+    borderRadius: "8px",
+    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+    margin: "1rem 0",
+  },
+  logo: {
+    width: "150px",
+    marginBottom: "1rem",
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: "2rem",
   },
 });
 
 const SelectSheets = ({ state, sheets, defaultState }) => {
   const dispatch = useDispatch();
-  //   const [sheets, setSheets] = useState([]);
-  // const [text, setText] = useState("Some text.");
-  // // const [state, setState] = useState([]);
-  // const fileInputRef = React.useRef(null);
-
-  // const handleTextInsertion = async () => {
-  //   await insertText(text);
-  // };
-
-  // const handleTextChange = async (event) => {
-  //   setText(event.target.value);
-  // };
-
-  // const handleFileInputChange = (event) => {
-  //   const files = event.target.files;
-  //   const arr = [];
-  //   if (files && files.length > 0) {
-  //     setState(Object.values(files));
-  //     readExcelFile(files);
-  //     // console.log("State", state, "files", files);
-  //     // for (let key in files) {
-  //     //   console.log(200, files[key], 200);
-  //     // }
-  //   }
-  // };
-
   const styles = useStyles();
-  return (
-    <div className={styles.textPromptAndInsertion}>
-      {/* <Field className={styles.textAreaField} size="large" label="Enter text to be inserted into the document.">
-        <Textarea size="large" value={text} onChange={handleTextChange} />
-      </Field>
-      <Field className={styles.instructions}>Click the button to insert text.</Field>
-      <Button appearance="primary" disabled={false} size="large" onClick={handleTextInsertion}>
-        Insert text
-      </Button> */}
-      <Slideshow state={state} />
 
-      <h3>Select File Sheets</h3>
-      {state.map((file, i) => {
-        return (
-          <div key={i}>
-            <h3>{file.name}</h3>
-            {/* {file.selected &&
-              sheets[file.name].sheets.map((obj) => {
-                return (
-                  <div className={styles.div} key={i}>
-                    <label>{obj.name}</label>
-                    <input
-                      className={styles.input}
-                      onChange={async (e) => {
-                        obj.selected = e.target.checked;
-                        await readExcelFiles(file, obj.name, dispatch);
-                      }}
-                      key={i}
-                      type="checkbox"
-                    />
-                  </div>
-                );
-              })} */}
-          </div>
-        );
-      })}
-      <Button
-        appearance="primary"
-        disabled={false}
-        size="large"
-        onClick={() => {
-          const invoiceData = defaultState.fileContent;
-          // const columnNames = Object.keys(invoiceData).filter((key) => key !== "!ref");
-          // console.log("Column names (entity names):", columnNames);
-          console.log("Invoice Data: ", invoiceData);
-        }}
-      >
-        Next
-      </Button>
+  return (
+    <div className={styles.container}>
+      <img src={logo} alt="Acumen Logo" className={styles.logo} />
+      <h2 className={styles.header}>Select File Sheets</h2>
+      <div className={styles.textPromptAndInsertion}>
+        <Slideshow state={state} />
+
+        {state.map((file, i) => {
+          return (
+            <div key={i} className={styles.fileSection}>
+              <h3>{file.name}</h3>
+              {file?.selected &&
+                sheets[file?.name]?.sheets.map((obj, j) => {
+                  return (
+                    <div className={styles.div} key={j}>
+                      <label>{obj.name}</label>
+                      <input
+                        className={styles.input}
+                        onChange={async (e) => {
+                          obj.selected = e.target.checked;
+                          await readExcelFiles(file, obj.name, dispatch);
+                        }}
+                        type="checkbox"
+                      />
+                    </div>
+                  );
+                })}
+            </div>
+          );
+        })}
+
+        <Button
+          appearance="primary"
+          size="large"
+          onClick={() => {
+            const invoiceData = defaultState.fileContent;
+            console.log("Invoice Data: ", invoiceData);
+          }}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };
+
 const mapStateToProps = (state) => {
   return {
     state: state.state,
@@ -122,4 +117,5 @@ const mapStateToProps = (state) => {
     defaultState: state,
   };
 };
+
 export default connect(mapStateToProps, {})(SelectSheets);

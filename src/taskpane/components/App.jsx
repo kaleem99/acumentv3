@@ -16,13 +16,14 @@ import { SET_STATE, SET_CREDITS, SET_SESSION } from "../../redux/actions";
 import { userPool, client } from "./aws-exports";
 import Login from "./Login";
 import SideMenu from "./SideMenu";
+import FileUpload from "./FilePicker";
 const useStyles = makeStyles({
   root: {
     minHeight: "100vh",
   },
 });
 
-const App = ({ title, section, state, defaultState }) => {
+const App = ({ title, section, state, defaultState, session }) => {
   const [loading, setLoading] = React.useState(true);
   // const [isAuthenticated, setIsAuthenticated] = React.useState("Login");
   const [isAuthenticated, setIsAuthenticated] = React.useState("Login");
@@ -95,7 +96,7 @@ const App = ({ title, section, state, defaultState }) => {
             console.log(session, "SESSION_NEW");
             let group = session.accessToken.payload["cognito:groups"][0];
             console.log(group, "GROUP_100", session.idToken["payload"]);
-            await fetchData(session.idToken.jwtToken, group);
+            // await fetchData(session.idToken.jwtToken, group);
             dispatch({ type: SET_STATE, payload: "" });
             dispatch({ type: SET_SESSION, payload: session });
             try {
@@ -190,6 +191,8 @@ const App = ({ title, section, state, defaultState }) => {
     <div className={styles.root}>
       <SideMenu />
       {checkState()}
+      {/* {console.log("SESSION", session)}
+      {session && <FileUpload session={session} />} */}
       {/* <SelectFiles setIsAuthenticated={setIsAuthenticated} />      <p className="Test">Hello</p> */}
       {/* <Button appearance="primary" m disabled={false} size="large" onClick={() => getExcelSheets(state[0])}>
         Test Range Selection
@@ -199,10 +202,12 @@ const App = ({ title, section, state, defaultState }) => {
 };
 const mapStateToProps = (state) => {
   console.log(state, 59);
+
   return {
     section: state.section,
     state: state.state,
     defaultState: state,
+    session: state.session,
   };
 };
 

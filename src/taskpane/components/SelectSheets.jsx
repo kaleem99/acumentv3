@@ -60,18 +60,63 @@ const useStyles = makeStyles({
   },
 });
 
-const SelectSheets = ({ state, sheets, defaultState }) => {
+const SelectSheets = ({ files, sheets, defaultState, session }) => {
   const dispatch = useDispatch();
   const styles = useStyles();
+  console.log("files state 97 97");
+  console.log(files, session);
+  const handleSubmit = async () => {
+    // e.preventDefault();
+    console.log(files, 70);
+    if (files.length > 25) {
+      alert("Upload attempt exceeds limit of 25 files.");
+      return;
+    }
 
+    const fileData = await Promise.all(
+      Array.from(files).map(async (file) => {
+        const reader = new FileReader();
+        return new Promise((resolve, reject) => {
+          reader.onload = (event) => {
+            const base64File = event.target.result.split(",")[1];
+            resolve({ file: base64File, file_name: file.name });
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      })
+    );
+
+    const body = { documents: fileData };
+
+    try {
+      const response = await fetch("https://jms1n3u7yl.execute-api.eu-west-1.amazonaws.com/prod/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.idToken.jwtToken}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        console.log("Files uploaded successfully:", await response.json());
+      } else {
+        const errorData = await response.json();
+        console.error("File upload failed:", errorData);
+      }
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
+  };
   return (
     <div className={styles.container}>
       <img src={logo} alt="Acumen Logo" className={styles.logo} />
       <h2 className={styles.header}>Select File Sheets</h2>
       <div className={styles.textPromptAndInsertion}>
-        <Slideshow state={state} />
+        <Slideshow state={files} />
 
-        {state.map((file, i) => {
+        {files.map((file, i) => {
           return (
             <div key={i} className={styles.fileSection}>
               <h3>{file.name}</h3>
@@ -95,15 +140,8 @@ const SelectSheets = ({ state, sheets, defaultState }) => {
           );
         })}
 
-        <Button
-          appearance="primary"
-          size="large"
-          onClick={() => {
-            const invoiceData = defaultState.fileContent;
-            console.log("Invoice Data: ", invoiceData);
-          }}
-        >
-          Next
+        <Button appearance="primary" size="large" onClick={() => handleSubmit()}>
+          Upload Files
         </Button>
       </div>
     </div>
@@ -112,9 +150,10 @@ const SelectSheets = ({ state, sheets, defaultState }) => {
 
 const mapStateToProps = (state) => {
   return {
-    state: state.state,
+    files: state.state,
     sheets: state.sheets,
     defaultState: state,
+    session: state.session,
   };
 };
 

@@ -4,6 +4,7 @@ import { connect, useDispatch } from "react-redux";
 import { readExcelFiles } from "../ReadFiles";
 import Slideshow from "./Slideshow";
 import logo from "../../../assets/Acumen.png"; // Replace with the path to your logo image
+import LoadingScreen from "./LoadingScreen";
 
 const useStyles = makeStyles({
   container: {
@@ -62,6 +63,7 @@ const useStyles = makeStyles({
 
 const SelectSheets = ({ files, sheets, defaultState, session }) => {
   const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
   const styles = useStyles();
   console.log("files state 97 97");
   console.log(files, session);
@@ -90,6 +92,7 @@ const SelectSheets = ({ files, sheets, defaultState, session }) => {
     const body = { documents: fileData };
 
     try {
+      setLoading(true);
       const response = await fetch("https://jms1n3u7yl.execute-api.eu-west-1.amazonaws.com/prod/upload", {
         method: "POST",
         headers: {
@@ -101,6 +104,7 @@ const SelectSheets = ({ files, sheets, defaultState, session }) => {
 
       if (response.ok) {
         console.log("Files uploaded successfully:", await response.json());
+        setLoading(false);
       } else {
         const errorData = await response.json();
         console.error("File upload failed:", errorData);
@@ -114,8 +118,8 @@ const SelectSheets = ({ files, sheets, defaultState, session }) => {
       <img src={logo} alt="Acumen Logo" className={styles.logo} />
       <h2 className={styles.header}>Select File Sheets</h2>
       <div className={styles.textPromptAndInsertion}>
-        <Slideshow state={files} />
-
+        {/* <Slideshow state={files} /> */}
+        {loading && <LoadingScreen />}
         {files.map((file, i) => {
           return (
             <div key={i} className={styles.fileSection}>

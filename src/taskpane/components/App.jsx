@@ -17,6 +17,7 @@ import { userPool, client } from "./aws-exports";
 import Login from "./Login";
 import SideMenu from "./SideMenu";
 import FileUpload from "./FilePicker";
+import LoadingScreen from "./LoadingScreen";
 const useStyles = makeStyles({
   root: {
     minHeight: "100vh",
@@ -42,7 +43,66 @@ const App = ({ title, section, state, defaultState, session }) => {
     console.log("Extract button clicked in React");
     window.actionButton2(); // Call the global function if needed
   };
+  const checkAuth = async () => {
+    const user = userPool.getCurrentUser();
+    // user.signOut();
+    // *** check if user is logged in ****
+    if (user) {
+      user.getSession(async (err, session) => {
+        if (err || !session.isValid()) {
+          dispatch({ type: SET_STATE, payload: "Login" });
+          setIsAuthenticated("Login");
 
+          console.log(err, !session.isValid(), 200);
+          // history.push("/login"); // Redirect to login if not authenticated
+        } else {
+          setIsAuthenticated("Home");
+          // console.log(9999, session.idToken.jwtToken);
+          console.log(session, "SESSION_NEW");
+          let group = session.accessToken.payload["cognito:groups"][0];
+          console.log(group, "GROUP_100", session.idToken["payload"]);
+          // await fetchData(session.idToken.jwtToken, group);
+          dispatch({ type: SET_STATE, payload: "" });
+          dispatch({ type: SET_SESSION, payload: session });
+          try {
+            const input = {
+              // UserPoolId: process.env.REACT_APP_API_POOLID,
+              GroupName: session["accessToken"].payload["cognito:groups"][0],
+            };
+            // const command = new ListUsersInGroupCommand(input);
+
+            // const response = await client.send(command);
+            // console.log(response);
+            // dispatch({ type: "GET_USERS", payload: response });
+            // fetchData(session.idToken.jwtToken);
+          } catch (error) {
+            console.error("Error listing users:", error);
+          }
+          // dispatch({ type: "SESSION_DATA", payload: session });
+        }
+        setLoading(false);
+      });
+      user.getUserAttributes((err, attributes) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(attributes);
+          // dispatch({ type: "GET_USERS", payload: attributes });
+        }
+      });
+      user.getUserData((err, data) => {
+        if (err) {
+          console.log(err);
+        } else {
+          // console.log(data, 1);
+        }
+      });
+    } else {
+      setIsAuthenticated("Login");
+      // history.push("/login"); // Redirect to login if not authenticated
+      setLoading(false);
+    }
+  };
   React.useEffect(() => {
     console.log(state, "STATE", 46, defaultState);
     // fetch("https://uh3wulfyxd.execute-api.eu-west-1.amazonaws.com/prod/tenant/{tenantid}/balance", {
@@ -78,66 +138,6 @@ const App = ({ title, section, state, defaultState, session }) => {
         })
         .catch((error) => console.error("Error:", error));
     };
-    const checkAuth = async () => {
-      const user = userPool.getCurrentUser();
-      // user.signOut();
-      // *** check if user is logged in ****
-      if (user) {
-        user.getSession(async (err, session) => {
-          if (err || !session.isValid()) {
-            dispatch({ type: SET_STATE, payload: "Login" });
-            setIsAuthenticated("Login");
-
-            console.log(err, !session.isValid(), 200);
-            // history.push("/login"); // Redirect to login if not authenticated
-          } else {
-            setIsAuthenticated("Home");
-            // console.log(9999, session.idToken.jwtToken);
-            console.log(session, "SESSION_NEW");
-            let group = session.accessToken.payload["cognito:groups"][0];
-            console.log(group, "GROUP_100", session.idToken["payload"]);
-            // await fetchData(session.idToken.jwtToken, group);
-            dispatch({ type: SET_STATE, payload: "" });
-            dispatch({ type: SET_SESSION, payload: session });
-            try {
-              const input = {
-                // UserPoolId: process.env.REACT_APP_API_POOLID,
-                GroupName: session["accessToken"].payload["cognito:groups"][0],
-              };
-              // const command = new ListUsersInGroupCommand(input);
-
-              // const response = await client.send(command);
-              // console.log(response);
-              // dispatch({ type: "GET_USERS", payload: response });
-              // fetchData(session.idToken.jwtToken);
-            } catch (error) {
-              console.error("Error listing users:", error);
-            }
-            // dispatch({ type: "SESSION_DATA", payload: session });
-          }
-          setLoading(false);
-        });
-        user.getUserAttributes((err, attributes) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log(attributes);
-            // dispatch({ type: "GET_USERS", payload: attributes });
-          }
-        });
-        user.getUserData((err, data) => {
-          if (err) {
-            console.log(err);
-          } else {
-            // console.log(data, 1);
-          }
-        });
-      } else {
-        setIsAuthenticated("Login");
-        // history.push("/login"); // Redirect to login if not authenticated
-        setLoading(false);
-      }
-    };
 
     checkAuth();
     let x = document.querySelectorAll("button");
@@ -170,7 +170,7 @@ const App = ({ title, section, state, defaultState, session }) => {
       case "Sheets":
         return <SelectSheets setIsAuthenticated={setIsAuthenticated} />;
       case "Login":
-        return <Login setIsAuthenticated={setIsAuthenticated} />;
+        return <Login checkAuth={checkAuth} setIsAuthenticated={setIsAuthenticated} />;
       default:
         return state.length === 0 ? (
           <>

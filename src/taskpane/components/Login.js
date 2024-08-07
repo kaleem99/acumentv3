@@ -7,7 +7,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import logo from "../../../assets/Acumen.png"; // Replace with the path to your logo image
 
-const authenticate = (Email, Password, setIsAuthenticated) => {
+const authenticate = (Email, Password, setIsAuthenticated, checkAuth) => {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({
       Username: Email,
@@ -23,6 +23,7 @@ const authenticate = (Email, Password, setIsAuthenticated) => {
         console.log("Login successful");
         console.log(result);
         setIsAuthenticated("");
+        checkAuth();
 
         // Update email as verified
         // try {
@@ -59,7 +60,7 @@ const authenticate = (Email, Password, setIsAuthenticated) => {
   });
 };
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = ({ setIsAuthenticated, checkAuth }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -69,11 +70,10 @@ const Login = ({ setIsAuthenticated }) => {
 
   const handleLogin = async () => {
     try {
-      const result = await authenticate(username, password, setIsAuthenticated);
+      const result = await authenticate(username, password, setIsAuthenticated, checkAuth);
       if (result.user) {
         setCognitoUser(result.user);
         setShowNewPassword(true);
-
       } else {
         setError("");
         console.log("Logged in user:", result);

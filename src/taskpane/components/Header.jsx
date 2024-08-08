@@ -154,7 +154,7 @@ const mapStateToProps = (state) => {
   return {
     newState: state.state,
     credits: state.credits,
-    userRole: state?.session?.idToken["payload"]["custom:userRole"]
+    userRole: ""
   };
 };
 export default connect(mapStateToProps, {})(Header);

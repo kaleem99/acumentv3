@@ -1,13 +1,10 @@
+import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 import React, { useState } from "react";
-import { userPool, client, userPoolId } from "./aws-exports";
-import { AuthenticationDetails, CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import {
-  CognitoIdentityProviderClient,
-  AdminUpdateUserAttributesCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
 import logo from "../../../assets/Acumen.png"; // Replace with the path to your logo image
+// import { userPool } from "../aws-exports";
 
-const authenticate = (Email, Password, setIsAuthenticated, checkAuth) => {
+
+const authenticate = (Email, Password, setIsAuthenticated) => {
   return new Promise((resolve, reject) => {
     const user = new CognitoUser({
       Username: Email,
@@ -17,13 +14,13 @@ const authenticate = (Email, Password, setIsAuthenticated, checkAuth) => {
       Username: Email,
       Password,
     });
-
+    
     user.authenticateUser(authDetails, {
       onSuccess: async (result) => {
         console.log("Login successful");
         console.log(result);
         setIsAuthenticated("");
-        checkAuth();
+        // checkAuth();
 
         // Update email as verified
         // try {
@@ -60,7 +57,7 @@ const authenticate = (Email, Password, setIsAuthenticated, checkAuth) => {
   });
 };
 
-const Login = ({ setIsAuthenticated, checkAuth }) => {
+const Login = ({ setIsAuthenticated }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -70,10 +67,17 @@ const Login = ({ setIsAuthenticated, checkAuth }) => {
 
   const handleLogin = async () => {
     try {
-      const result = await authenticate(username, password, setIsAuthenticated, checkAuth);
+      const result = await authenticate(username, password, setIsAuthenticated);
       if (result.user) {
         setCognitoUser(result.user);
         setShowNewPassword(true);
+        try {
+          await Auth.signIn(username, password);
+          console.log('User signed in');
+        } catch (error) {
+          console.error('Error signing in:', error);
+        }
+      
       } else {
         setError("");
         console.log("Logged in user:", result);

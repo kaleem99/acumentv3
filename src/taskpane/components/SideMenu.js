@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { makeStyles } from "@fluentui/react-components";
 import { BookTheta20Regular, DismissCircle20Regular } from "@fluentui/react-icons";
-import { Button, Checkbox, makeStyles, tokens } from "@fluentui/react-components";
-import { userPool, client } from "./aws-exports";
+import React, { useState } from "react";
+import { userPool } from "../aws-exports";
 
 const useStyles = makeStyles({
   burgerIcon: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   },
 });
 
-const SideMenu = () => {
+const SideMenu = ({ signOut }) => {
   const [isOpen, setIsOpen] = useState(false);
   const styles = useStyles();
 
@@ -70,8 +70,9 @@ const SideMenu = () => {
           </li>
           <li
             onClick={() => {
-              userPool.getCurrentUser().signOut();
-              window.location.reload();
+              // userPool.getCurrentUser().signOut();
+              // window.location.reload();
+              signOut();
             }}
             className={styles.li}
           >

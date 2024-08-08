@@ -1,0 +1,17 @@
+install amplify to pull the image from s3 
+use one libary and pass the image key in.
+
+Once the user is happy with checking all the docs or one of the docs have a confidence score of low less than 80
+
+The list view should have a button called create a doc or database entry, once its created you can list all uploads
+
+This list is for checking a pre database list 
+
+If a user has not yet clicked create docs than all of this is in review and holding until they click create or accept review it will list all 
+of these in a list for review
+
+call the createDocs amplify
+
+https://jms1n3u7yl.execute-api.eu-west-1.amazonaws.com/prod/document
+
+

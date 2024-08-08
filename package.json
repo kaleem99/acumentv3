@@ -28,6 +28,11 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
+    "@aws-amplify/auth": "^6.3.12",
+    "@aws-amplify/core": "^6.3.9",
+    "@aws-amplify/storage": "^6.5.4",
+    "@aws-amplify/ui-react": "^6.1.14",
+    "@aws-amplify/ui-react-storage": "^3.1.6",
     "@aws-sdk/client-cognito-identity-provider": "^3.620.1",
     "@aws-sdk/credential-providers": "^3.620.1",
     "@fluentui/react": "^8.119.3",
@@ -37,6 +42,7 @@
     "@fluentui/react-icons": "^2.0.252",
     "@microsoft/office-js": "^1.1.93",
     "amazon-cognito-identity-js": "^6.3.12",
+    "aws-amplify": "^6.4.4",
     "aws-sdk": "^2.1640.0",
     "core-js": "^3.36.0",
     "css-loader": "^7.1.1",

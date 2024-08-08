@@ -1,10 +1,11 @@
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./components/App";
-import { FluentProvider, webLightTheme } from "@fluentui/react-components";
-import store from "../redux";
 import { Provider } from "react-redux";
+import store from "../redux";
+import App from "./components/App";
 /* global document, Office, module, require */
+
 
 const title = "Contoso Task Pane Add-in";
 

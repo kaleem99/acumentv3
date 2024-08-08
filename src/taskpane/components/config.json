@@ -1,0 +1,14 @@
+{
+  "Auth": {
+    "region": "eu-west-1",
+    "userPoolId": "eu-west-1_dEIVZDohi",
+    "userPoolWebClientId": "4vh1o9t9fb6qqceba5nt9bm3oj",
+    "identityPoolId": "eu-west-1:842387ba-0984-4dbd-ae86-9da6310b6460"
+  },
+  "Storage": {
+    "AWSS3": {
+      "bucket": "stack-pooled-eu-west-1-625075209381",
+      "region": "eu-west-1"
+    }
+  }
+}
